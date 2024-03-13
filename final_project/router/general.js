@@ -1,5 +1,6 @@
 const express = require('express');
 let books = require("./booksdb.js");
+let axios = require("axios");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
@@ -48,7 +49,7 @@ public_users.get('/isbn/:isbn',function (req, res) {
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
   const author= req.params.author;
-  let book_ = []
+  let books_filtered = []
 
   for (let key in books) {
     if (books.hasOwnProperty(key)) {
@@ -82,5 +83,60 @@ public_users.get('/review/:isbn',function (req, res) {
   const isbn = req.params.isbn;
   res.send(books[isbn].reviews);
 });
+
+//Using ASYNC Await to get books by diferent details :D
+
+async function getBooks() {
+    try {
+      console.log("trying to get books with axios")
+      const response = await axios.get('https://andfrojasp-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/');
+      console.log("books are =");
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+getBooks();
+
+async function getBookByISBN() {
+    try {
+      console.log("trying to get books by its ISBN with axios")
+      const response = await axios.get('https://andfrojasp-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/isbn/2');
+      console.log("book are =");
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  getBookByISBN()
+
+
+  async function getBookByAUTHOR() {
+    try {
+      console.log("trying to get books by its Author with axios")
+      const response = await axios.get('https://andfrojasp-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/author/Unknown');
+      console.log("books of this author are =");
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  getBookByAUTHOR()
+
+  
+  async function getBookByTITLE() {
+    try {
+      console.log("trying to get books by its Title with axios")
+      const response = await axios.get('https://andfrojasp-5000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai//title/Fairy tales');
+      console.log("The details of this book are=");
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+getBookByTITLE()
 
 module.exports.general = public_users;
